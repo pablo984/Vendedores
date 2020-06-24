@@ -1,0 +1,96 @@
+import vendedores.*
+
+test "Test sobre los vendedores" {
+	/*Creacion de las instancias de Provincia*/
+	const buenosAires = new Provincia(poblacion=16000000)
+	const entreRios = new Provincia(poblacion=1308000)
+	const cordoba = new Provincia(poblacion=1400000)
+	const santaFe = new Provincia(poblacion=3400000)
+	
+	/*Creacion de las instancias de Ciudad*/	
+	const chivilcoy = new Ciudad(provincia=buenosAires)
+	const bragado = new Ciudad(provincia=buenosAires)
+	const lobos = new Ciudad(provincia=buenosAires)
+	const pergamino = new Ciudad(provincia=buenosAires)
+	const zarate = new Ciudad(provincia=buenosAires)
+	const rosario = new Ciudad(provincia=santaFe)
+	const rafaela = new Ciudad(provincia=santaFe)
+	const sanFrancisco = new Ciudad(provincia=cordoba)
+	const diamante = new Ciudad(provincia=entreRios)
+	
+	/*Creacion de las instancias de Vendedor*/
+	const pablo = new Fijo(ciudad=chivilcoy)
+	const juan = new Fijo(ciudad=bragado)
+	const mariana = new Fijo(ciudad=zarate)
+	const fabian = new Viajante(provinciasHabilitadas=[santaFe, entreRios])
+	const ana = new Viajante(provinciasHabilitadas=[cordoba])
+	const marcelo = new Viajante(provinciasHabilitadas=[buenosAires, santaFe])
+	const comercio1 = new ComercioCorresponsal(sucursales=[lobos, bragado, pergamino])
+	const comercio2 = new ComercioCorresponsal(sucursales=[rosario, rafaela])
+	const comercio3 = new ComercioCorresponsal(sucursales=[sanFrancisco, diamante])
+	const comercio4 = new ComercioCorresponsal(sucursales=[zarate, diamante, sanFrancisco])
+	const comercio5 = new ComercioCorresponsal(sucursales=[lobos, pergamino, zarate, chivilcoy, rosario])
+	
+	/*Test para saber si un Vendedor puede trabajar en una Ciudad*/
+	assert.that(pablo.puedeTrabajarEn(chivilcoy))
+	assert.notThat(pablo.puedeTrabajarEn(zarate))
+	assert.that(juan.puedeTrabajarEn(bragado))
+	assert.notThat(juan.puedeTrabajarEn(chivilcoy))
+	assert.that(mariana.puedeTrabajarEn(zarate))
+	assert.notThat(mariana.puedeTrabajarEn(bragado))
+	
+	assert.that(fabian.puedeTrabajarEn(rafaela))
+	assert.notThat(fabian.puedeTrabajarEn(sanFrancisco))
+	assert.that(ana.puedeTrabajarEn(sanFrancisco))
+	assert.notThat(ana.puedeTrabajarEn(bragado))
+	
+	assert.that(comercio1.puedeTrabajarEn(lobos))
+	assert.notThat(comercio1.puedeTrabajarEn(rosario))
+	assert.that(comercio2.puedeTrabajarEn(rafaela))
+	assert.notThat(comercio2.puedeTrabajarEn(pergamino))
+	assert.that(comercio3.puedeTrabajarEn(diamante))
+	assert.notThat(comercio3.puedeTrabajarEn(bragado))
+	
+	/*Cración de las instancias de Certificacion*/
+	const certificado1 = new Certificacion(puntos=10)
+	const certificado2 = new Certificacion(puntos=8, esDeProductos=false)
+	const certificado3 = new Certificacion(puntos=15)
+	const certificado4 = new Certificacion(puntos=20, esDeProductos=false)
+	const certificado5 = new Certificacion(puntos=5, esDeProductos=false)
+	const certificado6 = new Certificacion(puntos=30)
+	
+	/*Agregado de certificaciones a los Vendedores*/
+	pablo.agregarCertificaciones([certificado1, certificado2, certificado3])
+	juan.agregarCertificacion(certificado4)
+	fabian.agregarCertificaciones([certificado5, certificado6])
+	
+	/*Test para saber si un vendedor es Versátil*/
+	assert.that(pablo.esVendedorVersatil())
+	assert.notThat(juan.esVendedorVersatil())
+	assert.notThat(fabian.esVendedorVersatil())
+	
+	/*Test para saber si un vendedor es Firme*/
+	assert.that(pablo.esVendedorFirme())
+	assert.notThat(juan.esVendedorFirme())
+	assert.that(fabian.esVendedorFirme())
+	
+	/*Test para saber si un vendedor es Influyente*/
+	assert.notThat(pablo.esVendedorInfluyente())
+	assert.notThat(juan.esVendedorInfluyente())
+	assert.notThat(mariana.esVendedorInfluyente())
+	
+	assert.that(marcelo.esVendedorInfluyente())
+	assert.notThat(fabian.esVendedorInfluyente())
+	assert.notThat(ana.esVendedorInfluyente())
+	
+	assert.notThat(comercio1.esVendedorInfluyente())
+	assert.notThat(comercio2.esVendedorInfluyente())
+	assert.notThat(comercio3.esVendedorInfluyente())
+	assert.that(comercio4.esVendedorInfluyente())
+	assert.that(comercio5.esVendedorInfluyente())
+	
+	
+	
+	
+
+}
