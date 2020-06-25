@@ -1,5 +1,6 @@
 import vendedores.*
 import centrosDeDistribucion.*
+import geografia.*
 
 test "test de los Centros de distribución" {
 	/*Creacion de las instancias de Provincia*/

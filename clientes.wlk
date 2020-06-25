@@ -1,5 +1,6 @@
 import vendedores.*
 import centrosDeDistribucion.*
+import geografia.*
 
 class ClienteInseguro {
 	method puedeSerAtendidoPor(unVendedor) {

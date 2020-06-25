@@ -1,6 +1,7 @@
 import clientes.*
 import vendedores.*
 import centrosDeDistribucion.*
+import geografia.*
 
 
 test "Test para saber si un Cliente puede ser atendido por un determinado Vendedor" {

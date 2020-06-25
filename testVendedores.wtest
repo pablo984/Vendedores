@@ -1,4 +1,5 @@
 import vendedores.*
+import geografia.*
 
 test "Test sobre los vendedores" {
 	/*Creacion de las instancias de Provincia*/

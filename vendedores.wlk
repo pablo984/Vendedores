@@ -1,4 +1,5 @@
 import centrosDeDistribucion.*
+import geografia.*
 
 class Vendedor {
 	var property certificaciones = []
@@ -71,7 +72,6 @@ class Viajante inherits Vendedor {
 	override method esVendedorInfluyente() {
 		return provinciasHabilitadas.sum({ pro => pro.poblacion()} ) >= 10000000
 	}
-	
 }
 
 class ComercioCorresponsal inherits Vendedor {
@@ -100,11 +100,4 @@ class Certificacion {
 	var property esDeProductos = true
 }
 
-class Provincia {
-	var property poblacion
-}
-
-class Ciudad {
-	var property provincia 
-}
 

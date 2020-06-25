@@ -1,4 +1,5 @@
 import vendedores.*
+import geografia.*
 
 class Centro {
 	var property ciudad
