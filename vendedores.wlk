@@ -1,3 +1,5 @@
+import centrosDeDistribucion.*
+
 class Vendedor {
 	var property certificaciones = []
 	
@@ -32,7 +34,21 @@ class Vendedor {
 	/*Método adicional*/
 	method puntajeTotal() {
 		return certificaciones.sum({ cer => cer.puntos() })
-	}	
+	}
+	method tieneAfinidadCon(unCentro) {
+		return self.puedeTrabajarEn(unCentro.ciudad()) 
+	}
+	method esCandidatoPara(unCentro) {
+		return self.esVendedorVersatil() and self.tieneAfinidadCon(unCentro)
+	}
+	/*Método adicional*/
+	method tieneAlMenos3CertificacionesSobreProductos() {
+		return certificaciones.filter({ cer => cer.esDeProductos() }).size() >= 3
+	}
+	/*Método adicional*/
+	method esPersonaFisica() {
+		return true
+	}		
 }
 
 class Fijo inherits Vendedor {
@@ -70,6 +86,12 @@ class ComercioCorresponsal inherits Vendedor {
 	}
 	override method esVendedorInfluyente() {
 		return sucursales.size() >= 5 or self.provinciasDeLasSucursales().size() >= 3
+	}
+	override method tieneAfinidadCon(unCentro) {
+		return super(unCentro) and sucursales.any({ ciu => not unCentro.puedeCubrir(ciu) })
+	}
+	override method esPersonaFisica() {
+		return false
 	}
 }
 

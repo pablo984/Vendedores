@@ -1,6 +1,9 @@
+import clientes.*
 import vendedores.*
+import centrosDeDistribucion.*
 
-test "Test sobre los vendedores" {
+
+test "Test para saber si un Cliente puede ser atendido por un determinado Vendedor" {
 	/*Creacion de las instancias de Provincia*/
 	const buenosAires = new Provincia(poblacion=16000000)
 	const entreRios = new Provincia(poblacion=1308000)
@@ -31,26 +34,6 @@ test "Test sobre los vendedores" {
 	const comercio4 = new ComercioCorresponsal(sucursales=[zarate, diamante, sanFrancisco])
 	const comercio5 = new ComercioCorresponsal(sucursales=[lobos, pergamino, zarate, chivilcoy, rosario])
 	
-	/*Test para saber si un Vendedor puede trabajar en una Ciudad*/
-	assert.that(pablo.puedeTrabajarEn(chivilcoy))
-	assert.notThat(pablo.puedeTrabajarEn(zarate))
-	assert.that(juan.puedeTrabajarEn(bragado))
-	assert.notThat(juan.puedeTrabajarEn(chivilcoy))
-	assert.that(mariana.puedeTrabajarEn(zarate))
-	assert.notThat(mariana.puedeTrabajarEn(bragado))
-	
-	assert.that(fabian.puedeTrabajarEn(rafaela))
-	assert.notThat(fabian.puedeTrabajarEn(sanFrancisco))
-	assert.that(ana.puedeTrabajarEn(sanFrancisco))
-	assert.notThat(ana.puedeTrabajarEn(bragado))
-	
-	assert.that(comercio1.puedeTrabajarEn(lobos))
-	assert.notThat(comercio1.puedeTrabajarEn(rosario))
-	assert.that(comercio2.puedeTrabajarEn(rafaela))
-	assert.notThat(comercio2.puedeTrabajarEn(pergamino))
-	assert.that(comercio3.puedeTrabajarEn(diamante))
-	assert.notThat(comercio3.puedeTrabajarEn(bragado))
-	
 	/*Cración de las instancias de Certificacion*/
 	const certificado1 = new Certificacion(puntos=10)
 	const certificado2 = new Certificacion(puntos=8, esDeProductos=false)
@@ -60,42 +43,27 @@ test "Test sobre los vendedores" {
 	const certificado6 = new Certificacion(puntos=30)
 	
 	/*Agregado de certificaciones a los Vendedores*/
-	pablo.agregarCertificaciones([certificado1, certificado2, certificado3])
+	pablo.agregarCertificaciones([certificado1, certificado2, certificado3, certificado6])
 	juan.agregarCertificacion(certificado4)
 	fabian.agregarCertificaciones([certificado5, certificado6])
+	mariana.agregarCertificaciones([certificado2, certificado5])
 	
-	/*Test para saber si un vendedor es Versátil*/
-	assert.that(pablo.esVendedorVersatil())
-	assert.notThat(juan.esVendedorVersatil())
-	assert.notThat(fabian.esVendedorVersatil())
+	/*Creación de las instancias de Cliente*/
+	const cliente1 = new ClienteInseguro()
+	const cliente2 = new ClienteDetallista()
+	const cliente3 = new ClienteHumanista()
 	
-	/*Test para saber si un vendedor es Firme*/
-	assert.that(pablo.esVendedorFirme())
-	assert.notThat(juan.esVendedorFirme())
-	assert.that(fabian.esVendedorFirme())
+	assert.that(cliente1.puedeSerAtendidoPor(pablo))
+	assert.notThat(cliente1.puedeSerAtendidoPor(mariana))
 	
-	/*Test para saber si un vendedor es Influyente*/
-	assert.notThat(pablo.esVendedorInfluyente())
-	assert.notThat(juan.esVendedorInfluyente())
-	assert.notThat(mariana.esVendedorInfluyente())
+	assert.that(cliente2.puedeSerAtendidoPor(pablo))
+	assert.notThat(cliente2.puedeSerAtendidoPor(fabian))
 	
-	assert.that(marcelo.esVendedorInfluyente())
-	assert.notThat(fabian.esVendedorInfluyente())
-	assert.notThat(ana.esVendedorInfluyente())
+	assert.that(cliente3.puedeSerAtendidoPor(juan))
+	assert.that(cliente3.puedeSerAtendidoPor(ana))
+	assert.notThat(cliente3.puedeSerAtendidoPor(comercio1))
+	assert.notThat(cliente3.puedeSerAtendidoPor(comercio2))
 	
-	assert.notThat(comercio1.esVendedorInfluyente())
-	assert.notThat(comercio2.esVendedorInfluyente())
-	assert.notThat(comercio3.esVendedorInfluyente())
-	assert.that(comercio4.esVendedorInfluyente())
-	assert.that(comercio5.esVendedorInfluyente())
 	
-		
+
 }
-
-
-
-
-
-
-
-

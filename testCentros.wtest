@@ -1,0 +1,110 @@
+import vendedores.*
+import centrosDeDistribucion.*
+
+test "test de los Centros de distribución" {
+	/*Creacion de las instancias de Provincia*/
+	const buenosAires = new Provincia(poblacion=16000000)
+	const entreRios = new Provincia(poblacion=1308000)
+	const cordoba = new Provincia(poblacion=1400000)
+	const santaFe = new Provincia(poblacion=3400000)
+	
+	/*Creacion de las instancias de Ciudad*/	
+	const chivilcoy = new Ciudad(provincia=buenosAires)
+	const bragado = new Ciudad(provincia=buenosAires)
+	const lobos = new Ciudad(provincia=buenosAires)
+	const pergamino = new Ciudad(provincia=buenosAires)
+	const zarate = new Ciudad(provincia=buenosAires)
+	const rosario = new Ciudad(provincia=santaFe)
+	const rafaela = new Ciudad(provincia=santaFe)
+	const sanFrancisco = new Ciudad(provincia=cordoba)
+	const diamante = new Ciudad(provincia=entreRios)
+	
+	/*Creacion de las instancias de Vendedor*/
+	const pablo = new Fijo(ciudad=chivilcoy)
+	const juan = new Fijo(ciudad=bragado)
+	const mariana = new Fijo(ciudad=zarate)
+	const fabian = new Viajante(provinciasHabilitadas=[santaFe, entreRios])
+	const ana = new Viajante(provinciasHabilitadas=[cordoba])
+	const marcelo = new Viajante(provinciasHabilitadas=[buenosAires, santaFe])
+	const comercio1 = new ComercioCorresponsal(sucursales=[lobos, bragado, pergamino])
+	const comercio2 = new ComercioCorresponsal(sucursales=[rosario, rafaela])
+	const comercio3 = new ComercioCorresponsal(sucursales=[sanFrancisco, diamante, rafaela])
+	const comercio4 = new ComercioCorresponsal(sucursales=[zarate, diamante, sanFrancisco])
+	const comercio5 = new ComercioCorresponsal(sucursales=[lobos, pergamino, zarate, chivilcoy, rosario])
+	
+	/*Cración de las instancias de Certificacion*/
+	const certificado1 = new Certificacion(puntos=10)
+	const certificado2 = new Certificacion(puntos=8, esDeProductos=false)
+	const certificado3 = new Certificacion(puntos=15)
+	const certificado4 = new Certificacion(puntos=20, esDeProductos=false)
+	const certificado5 = new Certificacion(puntos=5, esDeProductos=false)
+	const certificado6 = new Certificacion(puntos=30)
+	
+	/*Agregado de certificaciones a los Vendedores*/
+	pablo.agregarCertificaciones([certificado1, certificado2, certificado3])
+	juan.agregarCertificacion(certificado4)
+	fabian.agregarCertificaciones([certificado5, certificado6])	
+	marcelo.agregarCertificaciones([certificado1, certificado3])
+	mariana.agregarCertificaciones([certificado3])
+	ana.agregarCertificaciones([certificado6, certificado2])
+	comercio3.agregarCertificaciones([certificado1, certificado2, certificado3, certificado4])
+	
+	/*Creación de las instancias de Centro*/
+	const centro1 = new Centro(ciudad=bragado, vendedores=[juan, pablo, mariana])
+	const centro2 = new Centro(ciudad=diamante, vendedores=[fabian,marcelo])	
+
+	assert.equals(pablo, centro1.elVendedorEstrella())
+	assert.equals(fabian, centro2.elVendedorEstrella())
+	
+	/*Test que genera error (visto en la consola) al agregar un vendedor que ya está en la lista*/
+	centro1.agregarVendedor(pablo)
+	centro2.agregarVendedor(fabian)
+	
+	/*Test para saber si un Centro puede cubrir, o no, una Ciudad*/
+	assert.that(centro1.puedeCubrir(zarate))
+	assert.notThat(centro1.puedeCubrir(lobos))
+	assert.that(centro2.puedeCubrir(rafaela))
+	assert.that(centro2.puedeCubrir(pergamino))
+	assert.notThat(centro2.puedeCubrir(sanFrancisco))
+	
+	/*Test para obtener los vendedores que tienen al menos una certificacion que no es de productos*/
+	assert.equals([juan, pablo], centro1.vendedoresGenericos())
+	assert.equals([fabian], centro2.vendedoresGenericos())
+	
+	/*Test para saber si centro1 y centro2 son centros robustos*/
+	assert.notThat(centro1.esRobusto())
+	assert.notThat(centro2.esRobusto())
+	
+	/*Se agrega una instancia más de Centro para realizar un test Verdadero en cuanto a robustez*/
+	const centro3 = new Centro(ciudad=rosario, vendedores=[pablo, fabian, ana, juan])
+	
+	assert.that(centro3.esRobusto())
+	
+	/*Test para que un Centro agregue una certificación a cada uno de los vendedores*/
+	const certificado7 = new Certificacion(puntos=12)
+	const gaston = new Viajante(provinciasHabilitadas=[santaFe])
+	const daniela = new Viajante(provinciasHabilitadas=[cordoba, santaFe])
+	const centro4 = new Centro(ciudad=rafaela, vendedores=[gaston, daniela])
+	
+	centro4.repartirCertificacion(certificado7)
+	centro4.repartirCertificacion(certificado2)
+	assert.equals(#{[certificado7, certificado2]}, centro4.certificacionesDeLosVendedores())
+	
+	/*Test para saber si un Vendedor tiene Afinidad por un Centro*/
+	assert.that(juan.tieneAfinidadCon(centro1))
+	assert.notThat(juan.tieneAfinidadCon(centro2))
+	assert.that(comercio3.tieneAfinidadCon(centro4))
+	assert.notThat(comercio3.tieneAfinidadCon(centro1))
+	
+	/*Test para saber si un vendedor es candidato para un Centro*/
+	assert.notThat(juan.esCandidatoPara(centro1))
+	assert.that(comercio3.esCandidatoPara(centro4))
+	
+	
+	
+	
+	
+	
+	
+
+}
